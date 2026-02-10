@@ -2,7 +2,7 @@ const axios = require("axios");
 
 exports.queryBot = async (req, res) => {
   const response = await axios.post(
-    "http://localhost:5005/webhooks/rest/webhook",
+    "http://127.0.0.1:5005/webhooks/rest/webhook",
     { sender: "user", message: req.body.message }
   );
 

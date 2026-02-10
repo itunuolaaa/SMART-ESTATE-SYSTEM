@@ -1,4 +1,4 @@
 module.exports = {
-  secret: "SUPER_SECRET_ESTATE_KEY",
-  expiresIn: "1d",
+  secret: "supersecretkey_smart_estate_2024",
+  expiresIn: "1d"
 };
