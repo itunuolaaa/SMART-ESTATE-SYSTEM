@@ -13,7 +13,35 @@ const ResidentDashboard = () => {
     const [visitorName, setVisitorName] = useState("");
     const [visitDate, setVisitDate] = useState("");
 
-    // Edit/Password State
+    const [complaintText, setComplaintText] = useState("");
+
+    const handleSubmitComplaint = async (e) => {
+        e.preventDefault();
+        if (!complaintText.trim()) return;
+
+        const token = localStorage.getItem("token");
+        try {
+            const res = await fetch("/api/options/complaints", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    title: "Resident Complaint",
+                    description: complaintText
+                })
+            });
+
+            if (res.ok) {
+                alert("Complaint submitted successfully!");
+                setComplaintText("");
+            }
+        } catch (err) {
+            console.error("Complaint submission error:", err);
+        }
+    };
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [isChangingPassword, setIsChangingPassword] = useState(false);
     const [editForm, setEditForm] = useState({ name: "", email: "", phone: "" });
@@ -241,8 +269,13 @@ const ResidentDashboard = () => {
                     <div className="card" style={{ maxWidth: "500px" }}>
                         <h2>Make Complaints</h2>
                         <p>Have an issue? You can lodge it here or use our chatbot assistant.</p>
-                        <textarea placeholder="Describe the issue..." style={{ minHeight: "100px" }}></textarea>
-                        <button style={{ width: "100%", marginBottom: "10px" }}>Submit Complaint</button>
+                        <textarea
+                            placeholder="Describe the issue..."
+                            style={{ minHeight: "100px" }}
+                            value={complaintText}
+                            onChange={(e) => setComplaintText(e.target.value)}
+                        ></textarea>
+                        <button style={{ width: "100%", marginBottom: "10px" }} onClick={handleSubmitComplaint}>Submit Complaint</button>
                         <button style={{ width: "100%", backgroundColor: "var(--accent-color)" }}>Chat with Assistant</button>
                     </div>
                 );
