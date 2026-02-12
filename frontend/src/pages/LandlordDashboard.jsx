@@ -159,7 +159,7 @@ const LandlordDashboard = () => {
                                             <div>
                                                 <h4 style={{ margin: "0 0 5px 0" }}>{c.title}</h4>
                                                 <p style={{ margin: "0 0 10px 0", color: "var(--text-secondary)" }}>{c.description}</p>
-                                                <small>From: Resident ID {c.user_id} | Date: {new Date(c.date).toLocaleDateString()}</small>
+                                                <small>From: <strong>{c.user_name || `Resident #${c.user_id}`}</strong> | Date: {new Date(c.date).toLocaleDateString()}</small>
                                             </div>
                                             <span style={{
                                                 padding: "4px 8px",

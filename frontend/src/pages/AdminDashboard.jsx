@@ -160,8 +160,10 @@ const AdminDashboard = () => {
                         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                             <thead style={{ backgroundColor: "#F7FAFC" }}>
                                 <tr>
+                                    <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>ID</th>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Name</th>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Email</th>
+                                    <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Phone</th>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Role</th>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Actions</th>
                                 </tr>
@@ -169,8 +171,10 @@ const AdminDashboard = () => {
                             <tbody>
                                 {users.map(u => (
                                     <tr key={u.id}>
+                                        <td style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>#{u.id}</td>
                                         <td style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>{u.name}</td>
                                         <td style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>{u.email}</td>
+                                        <td style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>{u.phone || "N/A"}</td>
                                         <td style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>
                                             <span style={{
                                                 textTransform: "capitalize",
@@ -199,7 +203,10 @@ const AdminDashboard = () => {
                                     <span style={{ color: c.status === 'open' ? 'red' : 'green' }}>{c.status.toUpperCase()}</span>
                                 </div>
                                 <p>{c.description}</p>
-                                <small>User ID: {c.user_id} | {new Date(c.date).toLocaleString()}</small>
+                                <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
+                                    <small>From: <strong>{c.user_name || `User #${c.user_id}`}</strong></small>
+                                    <small>{new Date(c.date).toLocaleString()}</small>
+                                </div>
                             </div>
                         ))}
                     </div>

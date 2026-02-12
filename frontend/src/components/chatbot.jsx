@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-const Chatbot = () => {
+const Chatbot = ({ isOpen, setIsOpen }) => {
   const [messages, setMessages] = useState([
     { text: "Hello! How can I help you today?", sender: "bot" }
   ]);
   const [input, setInput] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
 
   const sendMessage = async () => {
     if (!input.trim()) return;

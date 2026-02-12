@@ -14,6 +14,7 @@ const ResidentDashboard = () => {
     const [visitDate, setVisitDate] = useState("");
 
     const [complaintText, setComplaintText] = useState("");
+    const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
     const handleSubmitComplaint = async (e) => {
         e.preventDefault();
@@ -21,7 +22,7 @@ const ResidentDashboard = () => {
 
         const token = localStorage.getItem("token");
         try {
-            const res = await fetch("/api/options/complaints", {
+            const res = await fetch("/api/options/complaints/lodge", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -37,9 +38,20 @@ const ResidentDashboard = () => {
             if (res.ok) {
                 alert("Complaint submitted successfully!");
                 setComplaintText("");
+            } else {
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const data = await res.json();
+                    alert(`Failed to submit complaint: ${data.message || 'Unknown error'}`);
+                } else {
+                    const errorText = await res.text();
+                    console.error("Server error response:", errorText);
+                    alert(`Server error (${res.status}). Please check if the backend is running correctly.`);
+                }
             }
         } catch (err) {
             console.error("Complaint submission error:", err);
+            alert("Network error. Please try again later.");
         }
     };
     const [isEditingProfile, setIsEditingProfile] = useState(false);
@@ -276,7 +288,12 @@ const ResidentDashboard = () => {
                             onChange={(e) => setComplaintText(e.target.value)}
                         ></textarea>
                         <button style={{ width: "100%", marginBottom: "10px" }} onClick={handleSubmitComplaint}>Submit Complaint</button>
-                        <button style={{ width: "100%", backgroundColor: "var(--accent-color)" }}>Chat with Assistant</button>
+                        <button
+                            style={{ width: "100%", backgroundColor: "var(--accent-color)" }}
+                            onClick={() => setIsChatbotOpen(true)}
+                        >
+                            Chat with Assistant
+                        </button>
                     </div>
                 );
             case "help":
@@ -354,7 +371,7 @@ const ResidentDashboard = () => {
                     {renderContent()}
                 </div>
             </main>
-            <Chatbot />
+            <Chatbot isOpen={isChatbotOpen} setIsOpen={setIsChatbotOpen} />
         </div>
     );
 };
