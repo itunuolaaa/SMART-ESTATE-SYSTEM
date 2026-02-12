@@ -89,7 +89,7 @@ const SecurityDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Save Changes</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -115,7 +115,7 @@ const SecurityDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Update Password</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -126,11 +126,11 @@ const SecurityDashboard = () => {
             <div style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
                 <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
                     <button
-                        style={{ backgroundColor: activeTab === 'scan' ? 'var(--primary-color)' : '#718096' }}
+                        style={{ backgroundColor: activeTab === 'scan' ? 'var(--primary-color)' : '#4B5563' }}
                         onClick={() => setActiveTab('scan')}
                     >🔍 Scan QR</button>
                     <button
-                        style={{ backgroundColor: activeTab === 'contacts' ? 'var(--primary-color)' : '#718096' }}
+                        style={{ backgroundColor: activeTab === 'contacts' ? 'var(--primary-color)' : '#4B5563' }}
                         onClick={() => setActiveTab('contacts')}
                     >📞 Admin Contacts</button>
                 </div>

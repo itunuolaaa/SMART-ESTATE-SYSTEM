@@ -95,7 +95,7 @@ const LandlordDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Save Changes</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -121,7 +121,7 @@ const LandlordDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Update Password</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -183,7 +183,7 @@ const LandlordDashboard = () => {
                         <h2>Payment History</h2>
                         <div className="card" style={{ padding: "0", overflow: "hidden" }}>
                             <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-                                <thead style={{ backgroundColor: "#F7FAFC" }}>
+                                <thead style={{ backgroundColor: "#1F2937" }}>
                                     <tr>
                                         <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Date & Time</th>
                                         <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Description</th>
@@ -211,7 +211,7 @@ const LandlordDashboard = () => {
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div >
                 );
             case "help":
                 return (

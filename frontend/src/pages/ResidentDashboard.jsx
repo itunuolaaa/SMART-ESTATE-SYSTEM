@@ -170,7 +170,7 @@ const ResidentDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Save Changes</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -211,7 +211,7 @@ const ResidentDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Update Password</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>

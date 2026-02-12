@@ -100,7 +100,7 @@ const AdminDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Save Changes</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -126,7 +126,7 @@ const AdminDashboard = () => {
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
                             <button type="submit">Update Password</button>
-                            <button type="button" style={{ backgroundColor: "#718096" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
+                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -139,7 +139,7 @@ const AdminDashboard = () => {
                     <div>
                         <h2>System Overview</h2>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px" }}>
-                            <div className="card" style={{ borderTop: "4px solid #4299E1" }}>
+                            <div className="card" style={{ borderTop: "4px solid #14B8A6" }}>
                                 <h4>Total Users</h4>
                                 <p style={{ fontSize: "2rem" }}>{users.length}</p>
                             </div>
@@ -158,7 +158,7 @@ const AdminDashboard = () => {
                 return (
                     <div className="card" style={{ padding: "0", overflow: "hidden" }}>
                         <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-                            <thead style={{ backgroundColor: "#F7FAFC" }}>
+                            <thead style={{ backgroundColor: "#1F2937" }}>
                                 <tr>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>ID</th>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Name</th>
@@ -180,8 +180,8 @@ const AdminDashboard = () => {
                                                 textTransform: "capitalize",
                                                 padding: "2px 8px",
                                                 borderRadius: "4px",
-                                                backgroundColor: u.role === 'admin' ? '#EBF8FF' : '#F7FAFC',
-                                                color: u.role === 'admin' ? '#2B6CB0' : '#4A5568'
+                                                backgroundColor: u.role === 'admin' ? '#065F46' : '#4B5563',
+                                                color: u.role === 'admin' ? '#10B981' : '#9CA3AF'
                                             }}>{u.role}</span>
                                         </td>
                                         <td style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>
@@ -215,7 +215,7 @@ const AdminDashboard = () => {
                 return (
                     <div className="card" style={{ padding: "0", overflow: "hidden" }}>
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                            <thead style={{ backgroundColor: "#F7FAFC" }}>
+                            <thead style={{ backgroundColor: "#1F2937" }}>
                                 <tr>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>User</th>
                                     <th style={{ padding: "12px 20px", borderBottom: "1px solid #E2E8F0" }}>Amount</th>
