@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import "./login.css";
 
 const Login = () => {
   const [isRegistering, setIsRegistering] = useState(false);
+  // ... (keeping existing state) ...
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,6 +20,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    // ... (keeping existing logic) ...
     e.preventDefault();
     setError("");
     const endpoint = isRegistering ? "/api/auth/register" : "/api/auth/login";
@@ -62,57 +66,129 @@ const Login = () => {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", minHeight: "80vh" }}>
-      <div className="card" style={{ width: "100%", maxWidth: "400px" }}>
-        <h2>{isRegistering ? "Create Account" : "Access Portal"}</h2>
-        {error && <p style={{ color: "var(--error-color)" }}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          {isRegistering && (
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          )}
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+    <div className="login-container">
+      <button className="back-home-btn" onClick={() => navigate('/')}>
+        <ArrowLeft size={20} /> Back to Home
+      </button>
+      <div className="login-wrapper">
+        {/* Left Side - Branding */}
+        <div className="login-branding">
+          <div className="branding-content">
+            <h1 className="branding-title">SmartEstate</h1>
+            <p className="branding-subtitle">Estate Management Reimagined</p>
+            <div className="branding-features">
+              <div className="feature">
+                <span className="feature-icon">✓</span>
+                <span>Seamless Management</span>
+              </div>
+              <div className="feature">
+                <span className="feature-icon">✓</span>
+                <span>Real-time Updates</span>
+              </div>
+              <div className="feature">
+                <span className="feature-icon">✓</span>
+                <span>Secure Access</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          {isRegistering && (
-            <select name="role" value={formData.role} onChange={handleChange} required>
-              <option value="resident">Resident</option>
-              <option value="admin">Admin</option>
-              <option value="landlord">Landlord</option>
-              <option value="security">Security Personnel</option>
-            </select>
-          )}
+        {/* Right Side - Form */}
+        <div className="login-form-wrapper">
+          <div className="login-form">
+            <div className="form-header">
+              <h2>{isRegistering ? "Create Account" : "Welcome Back"}</h2>
+              <p className="form-subtitle">
+                {isRegistering
+                  ? "Join SmartEstate to manage your estate efficiently"
+                  : "Sign in to your SmartEstate account"}
+              </p>
+            </div>
 
-          <button type="submit" style={{ width: "100%" }}>
-            {isRegistering ? "Register" : "Login"}
-          </button>
-        </form>
-        <p style={{ marginTop: "1rem" }}>
-          {isRegistering ? "Already have an account?" : "New to Smart Estate?"}{" "}
-          <a href="#" onClick={(e) => { e.preventDefault(); setIsRegistering(!isRegistering); }}>
-            {isRegistering ? "Login here" : "Create account"}
-          </a>
-        </p>
+            {error && <div className="error-message">{error}</div>}
+
+            <form onSubmit={handleSubmit}>
+              {isRegistering && (
+                <div className="form-group">
+                  <label htmlFor="name">Full Name</label>
+                  <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              )}
+
+              <div className="form-group">
+                <label htmlFor="email">Email Address</label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {isRegistering && (
+                <div className="form-group">
+                  <label htmlFor="role">Select Your Role</label>
+                  <select
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="resident">Resident</option>
+                    <option value="landlord">Landlord</option>
+                    <option value="admin">Administrator</option>
+                    <option value="security">Security Personnel</option>
+                  </select>
+                </div>
+              )}
+
+              <button type="submit" className="submit-button">
+                {isRegistering ? "Create Account" : "Sign In"}
+              </button>
+            </form>
+
+            <div className="form-footer">
+              <p>
+                {isRegistering ? "Already have an account?" : "New to SmartEstate?"}{" "}
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsRegistering(!isRegistering);
+                    setError("");
+                  }}
+                >
+                  {isRegistering ? "Sign in" : "Create account"}
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,25 @@
 import { useEffect, useState, useRef } from "react";
+import "./dashboard.css";
+import {
+    Shield,
+    QrCode,
+    Phone,
+    Settings,
+    LogOut,
+    User,
+    Menu,
+    ChevronDown,
+    Search
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 const SecurityDashboard = () => {
     const [user, setUser] = useState({});
     const [qrInput, setQrInput] = useState("");
     const [scanResult, setScanResult] = useState(null);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const [activeTab, setActiveTab] = useState("scan");
 
     // Edit/Password State
@@ -30,7 +45,10 @@ const SecurityDashboard = () => {
     }, []);
 
     const validateQR = async () => {
-        if (!qrInput.trim()) return;
+        if (!qrInput.trim()) {
+            toast.error("Please enter a QR code");
+            return;
+        }
         const token = localStorage.getItem("token");
         try {
             const res = await fetch("/api/visitors/validate", {
@@ -43,9 +61,17 @@ const SecurityDashboard = () => {
             });
 
             const data = await res.json();
-            setScanResult({ success: res.ok, message: data.message, visitorName: data.visitorName });
+            if (res.ok) {
+                setScanResult({ success: true, message: data.message, visitorName: data.visitorName });
+                toast.success("Access Granted");
+            } else {
+                setScanResult({ success: false, message: data.message });
+                toast.error("Access Denied: " + data.message);
+            }
         } catch (err) {
+            console.error("Validation error:", err);
             setScanResult({ success: false, message: "System Connection Error" });
+            toast.error("System connection error");
         }
     };
 
@@ -55,24 +81,51 @@ const SecurityDashboard = () => {
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
         setIsEditingProfile(false);
-        alert("Profile updated successfully!");
+        toast.success("Profile updated successfully!");
     };
 
     const handleChangePassword = async (e) => {
         e.preventDefault();
         if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-            alert("Passwords do not match!");
+            toast.error("Passwords do not match!");
             return;
         }
-        alert("Password changed successfully!");
+        toast.success("Password changed successfully!");
         setIsChangingPassword(false);
         setPasswordForm({ oldPassword: "", newPassword: "", confirmPassword: "" });
     };
 
-    const renderView = () => {
+    const tabs = [
+        { id: "scan", label: "Scan QR", icon: <QrCode size={20} /> },
+        { id: "contacts", label: "Contacts", icon: <Phone size={20} /> },
+    ];
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: { type: "spring", stiffness: 100 }
+        }
+    };
+
+    const renderContent = () => {
         if (isEditingProfile) {
             return (
-                <div className="card" style={{ maxWidth: "500px", margin: "20px auto" }}>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="card"
+                    style={{ maxWidth: "500px" }}
+                >
                     <h2>Edit Profile</h2>
                     <form onSubmit={handleUpdateProfile}>
                         <div className="form-group">
@@ -88,17 +141,22 @@ const SecurityDashboard = () => {
                             <input type="tel" value={editForm.phone} placeholder="Enter phone number" onChange={e => setEditForm({ ...editForm, phone: e.target.value })} />
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
-                            <button type="submit">Save Changes</button>
-                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsEditingProfile(false)}>Cancel</button>
+                            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit">Save Changes</motion.button>
+                            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsEditingProfile(false)}>Cancel</motion.button>
                         </div>
                     </form>
-                </div>
+                </motion.div>
             )
         }
 
         if (isChangingPassword) {
             return (
-                <div className="card" style={{ maxWidth: "500px", margin: "20px auto" }}>
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="card"
+                    style={{ maxWidth: "500px" }}
+                >
                     <h2>Change Password</h2>
                     <form onSubmit={handleChangePassword}>
                         <div className="form-group">
@@ -114,105 +172,150 @@ const SecurityDashboard = () => {
                             <input type="password" value={passwordForm.confirmPassword} onChange={e => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })} required />
                         </div>
                         <div style={{ display: "flex", gap: "10px" }}>
-                            <button type="submit">Update Password</button>
-                            <button type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
+                            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit">Update Password</motion.button>
+                            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="button" style={{ backgroundColor: "#4B5563" }} onClick={() => setIsChangingPassword(false)}>Cancel</motion.button>
                         </div>
                     </form>
-                </div>
+                </motion.div>
             )
         }
 
         return (
-            <div style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
-                <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "30px" }}>
-                    <button
-                        style={{ backgroundColor: activeTab === 'scan' ? 'var(--primary-color)' : '#4B5563' }}
-                        onClick={() => setActiveTab('scan')}
-                    >🔍 Scan QR</button>
-                    <button
-                        style={{ backgroundColor: activeTab === 'contacts' ? 'var(--primary-color)' : '#4B5563' }}
-                        onClick={() => setActiveTab('contacts')}
-                    >📞 Admin Contacts</button>
-                </div>
-
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                style={{ maxWidth: "600px", margin: "0 auto" }}
+            >
                 {activeTab === 'scan' ? (
-                    <div className="card">
-                        <h2 style={{ marginBottom: "20px" }}>Visitor Verification</h2>
+                    <motion.div variants={itemVariants} className="card">
+                        <h2 style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px", justifyContent: "center" }}>
+                            <QrCode size={28} /> Visitor Verification
+                        </h2>
                         <div className="form-group">
                             <label>Scan or Enter QR Code Token</label>
                             <input
-                                style={{ fontSize: "1.2rem", textAlign: "center" }}
+                                style={{ fontSize: "1.2rem", textAlign: "center", letterSpacing: "2px" }}
                                 placeholder="e.g. VIS-123456"
                                 value={qrInput}
                                 onChange={e => setQrInput(e.target.value)}
                             />
                         </div>
-                        <button style={{ width: "100%", padding: "15px" }} onClick={validateQR}>Validate Access</button>
+                        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ width: "100%", padding: "15px", fontSize: "1.1rem" }} onClick={validateQR}>Validate Access</motion.button>
 
-                        {scanResult && (
-                            <div style={{
-                                marginTop: "30px",
-                                padding: "20px",
-                                borderRadius: "12px",
-                                backgroundColor: scanResult.success ? "#C6F6D5" : "#FED7D7",
-                                color: scanResult.success ? "#22543D" : "#822727",
-                                border: `2px solid ${scanResult.success ? "#48BB78" : "#F56565"}`
-                            }}>
-                                <h3 style={{ margin: "0 0 10px 0" }}>{scanResult.success ? "✅ ACCESS GRANTED" : "❌ ACCESS DENIED"}</h3>
-                                <p style={{ fontSize: "1.1rem" }}>{scanResult.message}</p>
-                                {scanResult.visitorName && <p style={{ fontWeight: "bold" }}>Visitor: {scanResult.visitorName}</p>}
-                            </div>
-                        )}
-                    </div>
+                        <AnimatePresence>
+                            {scanResult && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    style={{
+                                        marginTop: "30px",
+                                        padding: "20px",
+                                        borderRadius: "12px",
+                                        backgroundColor: scanResult.success ? "rgba(72, 187, 120, 0.2)" : "rgba(245, 101, 101, 0.2)",
+                                        color: scanResult.success ? "#065F46" : "#742A2A",
+                                        border: `2px solid ${scanResult.success ? "#48BB78" : "#F56565"}`,
+                                        textAlign: "center"
+                                    }}
+                                >
+                                    <h3 style={{ margin: "0 0 10px 0", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+                                        {scanResult.success ? <Shield size={24} /> : <Shield size={24} />}
+                                        {scanResult.success ? "ACCESS GRANTED" : "ACCESS DENIED"}
+                                    </h3>
+                                    <p style={{ fontSize: "1.1rem" }}>{scanResult.message}</p>
+                                    {scanResult.visitorName && <p style={{ fontWeight: "bold", fontSize: "1.2rem", marginTop: "10px" }}>Visitor: {scanResult.visitorName}</p>}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
                 ) : (
-                    <div className="card">
-                        <h2 style={{ marginBottom: "20px" }}>Estate Management</h2>
+                    <motion.div variants={itemVariants} className="card">
+                        <h2 style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px", justifyContent: "center" }}>
+                            <Phone size={28} /> Estate Management
+                        </h2>
                         <div style={{ textAlign: "left" }}>
-                            <div style={{ padding: "15px", borderBottom: "1px solid #edf2f7" }}>
+                            <div style={{ padding: "15px", borderBottom: "1px solid #E5E7EB" }}>
                                 <strong>Estate Manager</strong>
-                                <p style={{ margin: "5px 0" }}>📞 0809-123-4567</p>
-                                <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>Available for parking or maintenance issues.</p>
+                                <p style={{ margin: "5px 0", fontSize: "1.1rem" }}>📞 0809-123-4567</p>
+                                <p style={{ fontSize: "0.9rem", color: "#6B7280" }}>Available for parking or maintenance issues.</p>
                             </div>
-                            <div style={{ padding: "15px", borderBottom: "1px solid #edf2f7" }}>
+                            <div style={{ padding: "15px", borderBottom: "1px solid #E5E7EB" }}>
                                 <strong>Head of Security (Admin)</strong>
-                                <p style={{ margin: "5px 0" }}>📞 0802-333-4444</p>
-                                <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>Escalate critical incidents here.</p>
+                                <p style={{ margin: "5px 0", fontSize: "1.1rem" }}>📞 0802-333-4444</p>
+                                <p style={{ fontSize: "0.9rem", color: "#6B7280" }}>Escalate critical incidents here.</p>
                             </div>
                             <div style={{ padding: "15px" }}>
                                 <strong>Facility Office</strong>
-                                <p style={{ margin: "5px 0" }}>📞 0803-000-1111</p>
+                                <p style={{ margin: "5px 0", fontSize: "1.1rem" }}>📞 0803-000-1111</p>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
-            </div>
+            </motion.div>
         );
     };
 
     return (
-        <div className="dashboard-container" style={{ display: "block" }}>
-            <header className="top-header" style={{ justifyContent: "center", position: "relative" }}>
-                <div style={{ fontWeight: "bold", color: "var(--primary-color)", fontSize: "1.2rem", position: "absolute", left: "20px" }}>
-                    🛡️ Security Portal
+        <div className="dashboard-container">
+            <aside className={`sidebar ${isSidebarCollapsed ? "collapsed" : ""}`}>
+                <div className="sidebar-header">
+                    Security Portal
                 </div>
+                <nav className="sidebar-menu">
+                    {tabs.map(s => (
+                        <motion.div
+                            key={s.id}
+                            className={`menu-item ${activeTab === s.id ? "active" : ""}`}
+                            onClick={() => { setActiveTab(s.id); setIsEditingProfile(false); setIsChangingPassword(false); }}
+                            whileHover={{ x: 4 }}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            <span className="icon-wrapper">{s.icon}</span>
+                            {!isSidebarCollapsed && <span>{s.label}</span>}
+                        </motion.div>
+                    ))}
+                </nav>
+            </aside>
 
-                <div className="profile-bar" onClick={() => setIsProfileOpen(!isProfileOpen)} ref={dropdownRef} style={{ position: "absolute", right: "20px" }}>
-                    <span>🛡️</span>
-                    <span style={{ fontWeight: "600" }}>{user.name}</span>
-                    <span>▼</span>
-                    {isProfileOpen && (
-                        <div className="profile-dropdown">
-                            <div className="dropdown-item" onClick={() => { setIsEditingProfile(true); setIsChangingPassword(false); setIsProfileOpen(false); }}>📝 Edit Profile</div>
-                            <div className="dropdown-item" onClick={() => { setIsChangingPassword(true); setIsEditingProfile(false); setIsProfileOpen(false); }}>🔒 Change Password</div>
-                            <div className="dropdown-item" style={{ color: "var(--error-color)", borderTop: "1px solid #edf2f7" }} onClick={() => { localStorage.clear(); window.location.href = '/login' }}>🚪 Logout</div>
+            <main className="main-content">
+                <header className="top-header">
+                    <button className="hamburger-btn" onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}>
+                        <Menu size={24} />
+                    </button>
+                    <div className="profile-bar" onClick={() => setIsProfileOpen(!isProfileOpen)} ref={dropdownRef}>
+                        <div className="avatar-circle">
+                            <User size={20} />
                         </div>
-                    )}
-                </div>
-            </header>
+                        <span style={{ fontWeight: "600" }}>{user.name}</span>
+                        <ChevronDown size={16} />
+                        <AnimatePresence>
+                            {isProfileOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="profile-dropdown"
+                                >
+                                    <div className="dropdown-item" onClick={() => { setIsEditingProfile(true); setIsChangingPassword(false); setIsProfileOpen(false); }}>
+                                        <Settings size={16} style={{ marginRight: "8px" }} /> Edit Profile
+                                    </div>
+                                    <div className="dropdown-item" onClick={() => { setIsChangingPassword(true); setIsEditingProfile(false); setIsProfileOpen(false); }}>
+                                        <Shield size={16} style={{ marginRight: "8px" }} /> Change Password
+                                    </div>
+                                    <div className="dropdown-item" style={{ color: "#EF4444", borderTop: "1px solid #F3F4F6" }} onClick={() => { localStorage.clear(); window.location.href = '/login' }}>
+                                        <LogOut size={16} style={{ marginRight: "8px" }} /> Logout
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                </header>
 
-            <div className="content-area" style={{ width: "100%", padding: "40px 20px" }}>
-                {renderView()}
-            </div>
+                <div className="content-area">
+                    {renderContent()}
+                </div>
+            </main>
         </div>
     );
 };
