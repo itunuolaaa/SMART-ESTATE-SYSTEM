@@ -1,0 +1,27 @@
+version: "3.1"
+
+intents:
+  - greet
+  - check_dues
+  - pay_dues
+  - goodbye
+  - lodge_complaint
+  - check_payment_status
+
+responses:
+  utter_greet:
+    - text: "Hello 👋 Welcome to Smart Estate. How can I help you?"
+
+  utter_goodbye:
+    - text: "Goodbye 😊 Feel free to reach out anytime."
+
+  utter_ask_payment:
+    - text: "I can help you pay your estate dues. Please confirm to proceed."
+
+  utter_ask_complaint_details:
+    - text: "Please describe your complaint in detail."
+
+actions:
+  - action_check_dues
+  - action_lodge_complaint
+  - action_check_payment_status

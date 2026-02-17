@@ -1,0 +1,24 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.env
+
+# Python (Chatbot)
+chatbot/venv/
+__pycache__/
+*.py[cod]
+*$py.class
+chatbot/.rasa/
+chatbot/models/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build files
+dist/
+build/
+.next/
+out/

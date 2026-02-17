@@ -1,0 +1,43 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hello
+    - hi
+    - good morning
+    - hey
+
+- intent: check_dues
+  examples: |
+    - how much is my estate due
+    - check my dues
+    - what do I owe
+    - outstanding payments
+
+- intent: pay_dues
+  examples: |
+    - I want to pay my dues
+    - pay estate fee
+    - make payment
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you later
+
+- intent: lodge_complaint
+  examples: |
+    - I want to lodge a complaint
+    - Report an issue
+    - Something is broken
+    - Complaint about noise
+    - The elevator is not working
+
+- intent: check_payment_status
+  examples: |
+    - Did my payment go through?
+    - Check payment history
+    - Do I have any pending bills?
+    - status of my transactions
