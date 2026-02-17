@@ -239,7 +239,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
-          <p>&copy; 2024 SmartEstate. All rights reserved.</p>
+          <p>&copy; 2026 SmartEstate. All rights reserved.</p>
           <div className="footer-links">
             <a href="#privacy">Privacy Policy</a>
             <a href="#terms">Terms of Service</a>
