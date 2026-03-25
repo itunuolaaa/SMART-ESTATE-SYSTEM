@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/itunuolaaa/SMART-ESTATE-SYSTEM/issues"
   },
-  "homepage": "https://github.com/itunuolaaa/SMART-ESTATE-SYSTEM#readme"
+  "homepage": "https://github.com/itunuolaaa/SMART-ESTATE-SYSTEM#readme",
+  "dependencies": {
+    "pg": "^8.20.0"
+  }
 }
